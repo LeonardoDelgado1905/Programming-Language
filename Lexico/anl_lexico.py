@@ -490,13 +490,17 @@ readInFile = 1
 if(readInFile):
     # with open('miSalida.txt', 'w') as fout:
     #     sys.stdout = fout
-    os.chdir(r'C:\Users\LeonardoDelgado\Desktop\Lenguajes\lexico')
+    os.chdir(r'C:\Users\LeonardoDelgado\Desktop\Lenguajes\Programming-language\lexico')
     f = open('prueba.txt', "r")
     lines = f.readlines()
 else:    
     lines = sys.stdin.readlines() 
 current_state = 0
 error = False
+
+
+saveFila = 0
+saveCol = 0
 for fila in range(len(lines)):
     buffer = ""
     line = lines[fila]
@@ -546,6 +550,9 @@ for fila in range(len(lines)):
         else:            
             tokens, next_state = trans_lex[current_state][current_character]
             # print(next_state)
+            if(next_state == 11):
+                saveFila = fila
+                saveCol = col-1
             current_state = next_state
             if(tokens and tokens[0] == 'IgnorarLinea'):
                 break
@@ -575,5 +582,5 @@ for fila in range(len(lines)):
         printTokens(potential_tokens[current_state], buffer, fila, col_start_token)    
     
 if(current_state == 11 or current_state == 12):
-    printError(len(lines)-1, len(lines[len(lines)-1])-1)
+    printError(saveFila, saveCol)
 #sys.stdout = orig_stdout
